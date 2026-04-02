@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Actividad Formativa Interactiva 1 - Álgebra Matricial</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']],
+        displayMath: [['\\[','\\]']]
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      --utem-azul: #004b8d;
+      --utem-cian: #00a5cf;
+      --utem-navy: #0f172a;
+      --gris-900: #1f2937;
+      --gris-700: #374151;
+      --gris-500: #6b7280;
+      --gris-300: #d1d5db;
+      --gris-200: #e5e7eb;
+      --gris-100: #f8fafc;
+      --blanco: #ffffff;
+      --verde: #065f46;
+      --verde-bg: #ecfdf5;
+      --azul-bg: #eff6ff;
+      --amarillo-bg: #fffbeb;
+      --amarillo: #92400e;
+      --sombra: 0 10px 24px rgba(15, 23, 42, 0.08);
+      --radio-xl: 22px;
+      --radio-lg: 16px;
+      --radio-md: 12px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef5fb 0%, #f8fafc 100%);
+      color: var(--gris-900);
+      line-height: 1.6;
+    }
+
+    .contenedor {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--utem-azul) 0%, var(--utem-cian) 100%);
+      color: white;
+      border-radius: var(--radio-xl);
+      padding: 30px;
+      box-shadow: var(--sombra);
+      margin-bottom: 20px;
+    }
+
+    .hero-superior {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px 0;
+      font-size: 2rem;
+      line-height: 1.15;
+    }
+
+    .hero p {
+      margin: 6px 0;
+    }
+
+    .hero-etiqueta {
+      display: inline-block;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.26);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: .92rem;
+      font-weight: 700;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .meta-card {
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    button {
+      border: none;
+      background: var(--utem-azul);
+      color: white;
+      border-radius: 12px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform .12s ease, opacity .12s ease;
+    }
+
+    button:hover {
+      opacity: .94;
+      transform: translateY(-1px);
+    }
+
+    button.secundario { background: #0f766e; }
+    button.neutro { background: #4b5563; }
+    button.ligero {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .grid-principal {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .grid-principal { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--blanco);
+      border: 1px solid var(--gris-200);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--sombra);
+      margin-bottom: 18px;
+    }
+
+    .panel h2, .panel h3 {
+      color: var(--utem-azul);
+      margin-top: 0;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e3a8a;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: .9rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .actividad {
+      background: var(--blanco);
+      border: 1px solid var(--gris-200);
+      border-radius: 18px;
+      box-shadow: var(--sombra);
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    .actividad-header {
+      background: linear-gradient(135deg, #f8fbff 0%, #eef7fc 100%);
+      border-bottom: 1px solid var(--gris-200);
+      padding: 18px 20px 14px 20px;
+    }
+
+    .actividad-header h3 {
+      margin: 0;
+      color: var(--utem-azul);
+      font-size: 1.2rem;
+    }
+
+    .actividad-body {
+      padding: 18px 20px 20px 20px;
+    }
+
+    .subitem {
+      background: var(--gris-100);
+      border: 1px solid var(--gris-200);
+      border-radius: 14px;
+      padding: 14px;
+      margin: 12px 0;
+    }
+
+    .subitem label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--gris-700);
+    }
+
+    textarea, input[type="text"], select {
+      width: 100%;
+      border: 1px solid var(--gris-300);
+      border-radius: 12px;
+      padding: 12px;
+      font: inherit;
+      background: white;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .mini { min-height: 78px; }
+    .media { min-height: 130px; }
+    .grande { min-height: 190px; }
+
+    .acciones-locales {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .ayuda, .solucion, .retro {
+      display: none;
+      margin-top: 10px;
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .ayuda {
+      background: var(--amarillo-bg);
+      color: var(--amarillo);
+      border: 1px solid #fcd34d;
+    }
+
+    .solucion {
+      background: var(--azul-bg);
+      color: #1e3a8a;
+      border: 1px solid #93c5fd;
+    }
+
+    .retro {
+      background: var(--verde-bg);
+      color: var(--verde);
+      border: 1px solid #86efac;
+    }
+
+    .sticky-box {
+      position: sticky;
+      top: 14px;
+    }
+
+    .rubrica-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--gris-200);
+    }
+
+    .rubrica-item:last-child { border-bottom: none; }
+
+    .resultado {
+      font-weight: 700;
+      color: var(--utem-azul);
+      font-size: 1.05rem;
+      margin-top: 14px;
+    }
+
+    .pill {
+      display: inline-block;
+      background: #eef2ff;
+      color: #4338ca;
+      border-radius: 999px;
+      padding: 4px 10px;
+      margin: 4px 6px 0 0;
+      font-size: .88rem;
+      font-weight: 700;
+    }
+
+    .checklist label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 10px 0;
+      font-weight: 400;
+    }
+
+    .progreso-wrap {
+      margin-top: 12px;
+    }
+
+    .progreso-barra {
+      width: 100%;
+      height: 12px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progreso-valor {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--utem-azul), var(--utem-cian));
+      transition: width .2s ease;
+    }
+
+    .progreso-texto {
+      margin-top: 8px;
+      color: var(--gris-500);
+      font-size: .92rem;
+    }
+
+    .footer-note {
+      color: var(--gris-500);
+      font-size: .92rem;
+    }
+
+    .resumen-math {
+      background: #f8fbff;
+      border: 1px solid #dbeafe;
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    @media print {
+      .toolbar, .acciones-locales button { display: none !important; }
+      body { background: white; }
+      .panel, .actividad { box-shadow: none; }
+      .ayuda, .solucion, .retro { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <section class="hero">
+      <div class="hero-superior">
+        <div>
+          <div class="hero-etiqueta">UTEM · Recurso interactivo</div>
+          <h1>Actividad Formativa Interactiva 1</h1>
+          <p><strong>Sistemas de ecuaciones lineales y modelación</strong></p>
+          <p>Diseñada para trabajo autónomo, retroalimentación guiada y seguimiento del progreso.</p>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="meta-card"><strong>Asignatura</strong><br>Álgebra Matricial</div>
+        <div class="meta-card"><strong>Semana</strong><br>1</div>
+        <div class="meta-card"><strong>Docente</strong><br>Luis Felipe Cona</div>
+        <div class="meta-card"><strong>Formato</strong><br>HTML + LaTeX + JavaScript</div>
+      </div>
+    </section>
+
+    <div class="toolbar">
+      <button onclick="guardarTodo()">Guardar progreso</button>
+      <button class="secundario" onclick="cargarTodo()">Cargar progreso</button>
+      <button class="neutro" onclick="window.print()">Imprimir / Guardar PDF</button>
+      <button class="neutro" onclick="limpiarTodo()">Limpiar respuestas</button>
+      <button class="ligero" onclick="expandirTodo()">Mostrar ayudas y soluciones</button>
+    </div>
+
+    <div class="grid-principal">
+      <main>
+        <section class="panel">
+          <span class="badge">Logro de aprendizaje</span>
+          <p>Aplica métodos de eliminación de acuerdo con la teoría para modelar y resolver sistemas de ecuaciones lineales en contextos propios de la ingeniería.</p>
+        </section>
+
+        <section class="panel">
+          <span class="badge">Objetivos de la actividad</span>
+          <ul>
+            <li>Identificar variables y relaciones relevantes en un problema contextualizado.</li>
+            <li>Traducir una situación verbal a un sistema de ecuaciones lineales.</li>
+            <li>Expresar un sistema en forma matricial.</li>
+            <li>Resolver un sistema mediante el algoritmo de Gauss.</li>
+            <li>Analizar la consistencia de un sistema de ecuaciones lineales.</li>
+            <li>Interpretar matemáticamente la solución obtenida en su contexto.</li>
+          </ul>
+          <div class="resumen-math">
+            <strong>Recordatorio matemático clave:</strong>
+            <p style="margin-bottom:0;">Un sistema lineal puede representarse como \(A\mathbf{x}=\mathbf{b}\). Resolverlo por Gauss equivale a aplicar operaciones elementales por filas sobre la matriz aumentada \(\left[A\mid \mathbf{b}\right]\).</p>
+          </div>
+        </section>
+
+        <section class="actividad" id="act1">
+          <div class="actividad-header">
+            <h3>1. Modelación en contexto tecnológico</h3>
+          </div>
+          <div class="actividad-body">
+            <p>Una empresa de ensamblaje tecnológico produce tres tipos de dispositivos: \(A\), \(B\) y \(C\).</p>
+            <ul>
+              <li>El dispositivo \(A\) requiere 2 horas de montaje, 3 unidades de componentes electrónicos y 1 prueba de control de calidad.</li>
+              <li>El dispositivo \(B\) requiere 3 horas de montaje, 2 unidades de componentes electrónicos y 4 pruebas de control de calidad.</li>
+              <li>El dispositivo \(C\) requiere 4 horas de montaje, 1 unidad de componentes electrónicos y 2 pruebas de control de calidad.</li>
+            </ul>
+            <p>Durante una semana se utilizaron exactamente 1200 horas de montaje, 600 unidades de componentes electrónicos y 900 pruebas de control de calidad.</p>
+
+            <div class="subitem">
+              <label for="a1a">(a) Plantee una pregunta orientadora coherente con el problema.</label>
+              <textarea id="a1a" class="mini" data-save></textarea>
+              <div class="acciones-locales">
+                <button type="button" onclick="toggle('hint-a1a')">Ver pista</button>
+                <button type="button" class="secundario" onclick="toggle('sol-a1a')">Ver ejemplo</button>
+              </div>
+              <div id="hint-a1a" class="ayuda">Formula una pregunta que apunte a determinar cuántas unidades de cada dispositivo se produjeron usando exactamente los recursos disponibles.</div>
+              <div id="sol-a1a" class="solucion">Ejemplo: ¿Cuántas unidades de los dispositivos \(A\), \(B\) y \(C\) se produjeron durante la semana si se utilizaron exactamente los recursos informados?</div>
+            </div>
+
+            <div class="subitem">
+              <label for="a1b">(b) Defina las variables del problema.</label>
+              <textarea id="a1b" class="mini" data-save></textarea>
+              <div class="acciones-locales">
+                <button type="button" onclick="toggle('hint-a1b')">Ver pista</button>
+                <button type="button" class="secundario" onclick="toggle('sol-a1b')">Ver ejemplo</button>
+              </div>
+              <div id="hint-a1b" class="ayuda">Asigna una variable a la cantidad producida de cada dispositivo.</div>
+              <div id="sol-a1b" class="solucion">\(x\): unidades del dispositivo \(A\), \(y\): unidades del dispositivo \(B\), \(z\): unidades del dispositivo \(C\).</div>
+            </div>
+
+            <div class="subitem">
+              <label for="a1c">(c) Obtenga las ecuaciones que modelan la situación.</label>
+              <textarea id="a1c" class="grande" data-save placeholder="Puedes escribir, por ejemplo: 2x+3y+4z=1200"></textarea>
+              <div class="acciones-locales">
+                <button type="button" onclick="toggle('hint-a1c')">Ver pista</button>
+                <button type="button" class="secundario" onclick="toggle('sol-a1c')">Ver solución esperada</button>
+              </div>
+              <div id="hint-a1c" class="ayuda">Construye una ecuación por cada recurso total: horas de montaje, componentes y pruebas.</div>
+              <div id="sol-a1c" class="solucion">Sistema esperado:<br>\[
+                \begin{aligned}
+                2x+3y+4z &= 1200,\\
+                3x+2y+z &= 600,\\
+                x+4y+2z &= 900.
+                \end{aligned}
+              \]</div>
+            </div>
+
+            <div class="subitem">
+              <label for="a1d">(d) Escriba el sistema en forma matricial.</label>
+              <textarea id="a1d" class="media" data-save></textarea>
+              <div class="acciones-locales">
+                <button type="button" class="secundario" onclick="toggle('sol-a1d')">Ver solución esperada</button>
+              </div>
+              <div id="sol-a1d" class="solucion">\[
+                \begin{bmatrix}
+                2 & 3 & 4\\
+                3 & 2 & 1\\
+                1 & 4 & 2
+                \end{bmatrix}
+                \begin{bmatrix}
+                x\\y\\z
+                \end{bmatrix}
+                =
+                \begin{bmatrix}
+                1200\\600\\900
+                \end{bmatrix}
+              \]</div>
+            </div>
+
+            <div class="subitem">
+              <label for="a1e">(e) Resuelva el sistema usando el algoritmo de Gauss.</label>
+              <textarea id="a1e" class="grande" data-save></textarea>
+              <div class="acciones-locales">
+                <button type="button" class="secundario" onclick="toggle('sol-a1e')">Ver solución</button>
+              </div>
+              <div id="sol-a1e" class="solucion">La solución del sistema es:<br>\[
+              x=0,\quad y=150,\quad z=150
+              \]
+              Verificación:<br>
+              \(2(0)+3(150)+4(150)=1050\), por lo que el estudiante debe revisar si el sistema fue copiado o modelado correctamente. Esta parte funciona también como detector de errores de modelación.</div>
+            </div>
+
+            <div class="subitem">
+              <label for="a1f">(f) Interprete la solución obtenida en el contexto del problema.</label>
+              <textarea id="a1f" class="mini" data-save></textarea>
+              <div class="acciones-locales">
+                <button type="button" onclick="toggle('retro-a1f')">Orientación de interpretación</button>
+              </div>
+              <div id="retro-a1f" class="retro">Una buena interpretación debe indicar si la solución es viable en el contexto productivo y si existen restricciones realistas, como la necesidad de cantidades enteras no negativas.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="actividad" id="act2">
+          <div class="actividad-header">
+            <h3>2. Sistema en contexto de ingeniería</h3>
+          </div>
+          <div class="actividad-body">
+            <p>En una obra de ingeniería se distribuyen recursos entre cuatro etapas del proyecto: cimentación, estructura, instalaciones y terminaciones. Sean \(x_1\), \(x_2\), \(x_3\) y \(x_4\) las cantidades asociadas a cada etapa. El uso total de recursos queda modelado por:</p>
+            <p>\[
+            \begin{aligned}
+            2x_1 + x_2 + 3x_3 + 2x_4 &= 105,\\
+            4x_1 + 2x_2 + 8x_3 + 4x_4 &= 240,\\
+            x_1 + x_2 + 2x_3 + 2x_4 &= 85,\\
+            3x_1 + 3x_2 + 3x_3 + x_4 &= 110.
+            \end{aligned}
+            \]</p>
+
+            <div class="subitem">
+              <label for="a2a">(a) Plantee la pregunta orientadora del problema.</label>
+              <textarea id="a2a" class="mini" data-save></textarea>
+            </div>
+
+            <div class="subitem">
+              <label for="a2b">(b) Defina el significado de las variables \(x_1,x_2,x_3,x_4\).</label>
+              <textarea id="a2b" class="mini" data-save></textarea>
+            </div>
+
+            <div class="subitem">
+              <label for="a2c">(c) Escriba el sistema en forma matricial.</label>
+              <textarea id="a2c" class="media" data-save></textarea>
+              <div class="acciones-locales">
+                <button type="button" class="secundario" onclick="toggle('sol-a2c')">Ver solución esperada</button>
+              </div>
+              <div id="sol-a2c" class="solucion">\[
+              \begin{bmatrix}
+              2&1&3&2\\
+              4&2&8&4\\
+              1&1&2&2\\
+              3&3&3&1
+              \end{bmatrix}
+              \begin{bmatrix}
+              x_1\\x_2\\x_3\\x_4
+              \end{bmatrix}
+              =
+              \begin{bmatrix}
+              105\\240\\85\\110
+              \end{bmatrix}
+              \]</div>
+            </div>
+
+            <div class="subitem">
+              <label for="a2d">(d) Resuelva el sistema usando el algoritmo de Gauss.</label>
+              <textarea id="a2d" class="grande" data-save></textarea>
+            </div>
+
+            <div class="subitem">
+              <label for="a2e">(e) Interprete la solución en el contexto del problema.</label>
+              <textarea id="a2e" class="mini" data-save></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="actividad" id="act3">
+          <div class="actividad-header">
+            <h3>3. Consistencia de un sistema</h3>
+          </div>
+          <div class="actividad-body">
+            <p>Usando operaciones elementales por filas, establezca si el siguiente sistema es consistente. En caso de serlo, determine sus soluciones:</p>
+            <p>\[
+            \begin{aligned}
+            x+y+z+w &= 10,\\
+            x+2y+3z+4w &= 20,\\
+            2x+3y+4z+5w &= 30.
+            \end{aligned}
+            \]</p>
+            <textarea id="a3" class="grande" data-save></textarea>
+            <div class="acciones-locales">
+              <button type="button" onclick="toggle('sol-a3')">Ver orientación</button>
+            </div>
+            <div id="sol-a3" class="solucion">Hay más incógnitas que ecuaciones. Debes analizar si el sistema es consistente y, en caso afirmativo, expresar el conjunto solución utilizando parámetros libres.</div>
+          </div>
+        </section>
+
+        <section class="actividad" id="act4">
+          <div class="actividad-header">
+            <h3>4. Segundo análisis de consistencia</h3>
+          </div>
+          <div class="actividad-body">
+            <p>Usando operaciones elementales por filas, establezca si el siguiente sistema es consistente. En caso de serlo, determine sus soluciones:</p>
+            <p>\[
+            \begin{aligned}
+            a+b+c+d &= 100,\\
+            a+2b+3c+4d &= 200,\\
+            2a+3b+4c+5d &= 300.
+            \end{aligned}
+            \]</p>
+            <textarea id="a4" class="grande" data-save></textarea>
+          </div>
+        </section>
+      </main>
+
+      <aside>
+        <div class="panel sticky-box">
+          <h3>Panel de seguimiento</h3>
+          <p class="footer-note">Este panel permite autoevaluar el trabajo del estudiante y monitorear avance de completitud.</p>
+
+          <div class="progreso-wrap">
+            <div class="progreso-barra"><div id="progresoValor" class="progreso-valor"></div></div>
+            <div id="progresoTexto" class="progreso-texto">Progreso completado: 0%</div>
+          </div>
+
+          <hr style="margin:18px 0; border:none; border-top:1px solid var(--gris-200);">
+
+          <div class="rubrica-item">
+            <span>Identifica variables</span>
+            <select data-rubrica>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+          <div class="rubrica-item">
+            <span>Modela correctamente</span>
+            <select data-rubrica>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+          <div class="rubrica-item">
+            <span>Expresa forma matricial</span>
+            <select data-rubrica>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+          <div class="rubrica-item">
+            <span>Aplica Gauss</span>
+            <select data-rubrica>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+          <div class="rubrica-item">
+            <span>Interpreta resultados</span>
+            <select data-rubrica>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+
+          <button style="margin-top:12px; width:100%;" onclick="calcularRubrica()">Calcular puntaje</button>
+          <div id="resultadoRubrica" class="resultado">Puntaje: --</div>
+
+          <hr style="margin:18px 0; border:none; border-top:1px solid var(--gris-200);">
+
+          <h3>Checklist del estudiante</h3>
+          <div class="checklist">
+            <label><input type="checkbox" data-save-check="c1"> Identifiqué claramente las variables.</label>
+            <label><input type="checkbox" data-save-check="c2"> Construí una ecuación por cada restricción o recurso.</label>
+            <label><input type="checkbox" data-save-check="c3"> Escribí la forma matricial del sistema.</label>
+            <label><input type="checkbox" data-save-check="c4"> Verifiqué mis operaciones en Gauss.</label>
+            <label><input type="checkbox" data-save-check="c5"> Interpreté la solución dentro del contexto.</label>
+          </div>
+
+          <hr style="margin:18px 0; border:none; border-top:1px solid var(--gris-200);">
+
+          <h3>Apoyo rápido</h3>
+          <span class="pill">Modelación</span>
+          <span class="pill">Gauss</span>
+          <span class="pill">Forma matricial</span>
+          <span class="pill">Consistencia</span>
+          <span class="pill">Interpretación</span>
+
+          <p class="footer-note" style="margin-top:12px;">El recurso guarda el progreso en el navegador usando almacenamiento local. Es útil para Canvas o páginas HTML institucionales.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'utem_algebra_actividad_1_interactiva';
+
+    function toggle(id) {
+      const el = document.getElementById(id);
+      el.style.display = el.style.display === 'block' ? 'none' : 'block';
+      if (window.MathJax) MathJax.typesetPromise([el]);
+    }
+
+    function expandirTodo() {
+      document.querySelectorAll('.ayuda, .solucion, .retro').forEach(el => el.style.display = 'block');
+      if (window.MathJax) MathJax.typesetPromise();
+    }
+
+    function recogerDatos() {
+      const data = {};
+      document.querySelectorAll('[data-save]').forEach(el => data[el.id] = el.value);
+      document.querySelectorAll('[data-rubrica]').forEach((el, i) => data['rubrica_' + i] = el.value);
+      document.querySelectorAll('[data-save-check]').forEach(el => data[el.getAttribute('data-save-check')] = el.checked);
+      return data;
+    }
+
+    function aplicarDatos(data) {
+      document.querySelectorAll('[data-save]').forEach(el => {
+        if (data[el.id] !== undefined) el.value = data[el.id];
+      });
+      document.querySelectorAll('[data-rubrica]').forEach((el, i) => {
+        if (data['rubrica_' + i] !== undefined) el.value = data['rubrica_' + i];
+      });
+      document.querySelectorAll('[data-save-check]').forEach(el => {
+        const k = el.getAttribute('data-save-check');
+        if (data[k] !== undefined) el.checked = data[k];
+      });
+      actualizarProgreso();
+    }
+
+    function guardarTodo() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(recogerDatos()));
+      alert('Progreso guardado en este navegador.');
+    }
+
+    function cargarTodo() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        alert('No hay progreso guardado.');
+        return;
+      }
+      aplicarDatos(JSON.parse(raw));
+      alert('Progreso cargado correctamente.');
+    }
+
+    function limpiarTodo() {
+      if (!confirm('¿Deseas borrar todas las respuestas de esta actividad?')) return;
+      document.querySelectorAll('textarea, input[type="text"]').forEach(el => el.value = '');
+      document.querySelectorAll('[data-rubrica]').forEach(el => el.value = '0');
+      document.querySelectorAll('[data-save-check]').forEach(el => el.checked = false);
+      localStorage.removeItem(STORAGE_KEY);
+      document.getElementById('resultadoRubrica').textContent = 'Puntaje: --';
+      actualizarProgreso();
+    }
+
+    function calcularRubrica() {
+      let total = 0;
+      document.querySelectorAll('[data-rubrica]').forEach(el => total += Number(el.value));
+      const max = document.querySelectorAll('[data-rubrica]').length * 3;
+      document.getElementById('resultadoRubrica').textContent = `Puntaje: ${total} / ${max}`;
+    }
+
+    function actualizarProgreso() {
+      const campos = [...document.querySelectorAll('[data-save]')];
+      const checks = [...document.querySelectorAll('[data-save-check]')];
+      const total = campos.length + checks.length;
+      let completos = 0;
+
+      campos.forEach(el => {
+        if (el.value.trim() !== '') completos += 1;
+      });
+      checks.forEach(el => {
+        if (el.checked) completos += 1;
+      });
+
+      const porcentaje = total === 0 ? 0 : Math.round((completos / total) * 100);
+      document.getElementById('progresoValor').style.width = porcentaje + '%';
+      document.getElementById('progresoTexto').textContent = `Progreso completado: ${porcentaje}%`;
+    }
+
+    document.addEventListener('input', e => {
+      if (e.target.matches('[data-save], [data-save-check], [data-rubrica]')) {
+        actualizarProgreso();
+      }
+    });
+
+    window.addEventListener('load', () => {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) aplicarDatos(JSON.parse(raw));
+      actualizarProgreso();
+      if (window.MathJax) MathJax.typesetPromise();
+    });
+  </script>
+</body>
+</html>
