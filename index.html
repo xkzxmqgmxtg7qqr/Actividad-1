@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,8 +8,8 @@
   <script>
     window.MathJax = {
       tex: {
-        inlineMath: [['\\(','\\)'], ['$', '$']],
-        displayMath: [['\\[','\\]']]
+        inlineMath: [['\\(', '\\)'], ['$', '$']],
+        displayMath: [['\\[', '\\]']]
       },
       svg: { fontCache: 'global' }
     };
@@ -37,7 +38,9 @@
       --radio-md: 12px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -83,8 +86,8 @@
 
     .hero-etiqueta {
       display: inline-block;
-      background: rgba(255,255,255,.16);
-      border: 1px solid rgba(255,255,255,.26);
+      background: rgba(255, 255, 255, .16);
+      border: 1px solid rgba(255, 255, 255, .26);
       border-radius: 999px;
       padding: 6px 12px;
       font-size: .92rem;
@@ -99,8 +102,8 @@
     }
 
     .meta-card {
-      background: rgba(255,255,255,.14);
-      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255, 255, 255, .14);
+      border: 1px solid rgba(255, 255, 255, .22);
       border-radius: 14px;
       padding: 12px 14px;
     }
@@ -128,8 +131,14 @@
       transform: translateY(-1px);
     }
 
-    button.secundario { background: #0f766e; }
-    button.neutro { background: #4b5563; }
+    button.secundario {
+      background: #0f766e;
+    }
+
+    button.neutro {
+      background: #4b5563;
+    }
+
     button.ligero {
       background: #dbeafe;
       color: #1d4ed8;
@@ -143,7 +152,9 @@
     }
 
     @media (max-width: 960px) {
-      .grid-principal { grid-template-columns: 1fr; }
+      .grid-principal {
+        grid-template-columns: 1fr;
+      }
     }
 
     .panel {
@@ -155,7 +166,8 @@
       margin-bottom: 18px;
     }
 
-    .panel h2, .panel h3 {
+    .panel h2,
+    .panel h3 {
       color: var(--utem-azul);
       margin-top: 0;
     }
@@ -211,7 +223,9 @@
       color: var(--gris-700);
     }
 
-    textarea, input[type="text"], select {
+    textarea,
+    input[type="text"],
+    select {
       width: 100%;
       border: 1px solid var(--gris-300);
       border-radius: 12px;
@@ -225,9 +239,17 @@
       min-height: 100px;
     }
 
-    .mini { min-height: 78px; }
-    .media { min-height: 130px; }
-    .grande { min-height: 190px; }
+    .mini {
+      min-height: 78px;
+    }
+
+    .media {
+      min-height: 130px;
+    }
+
+    .grande {
+      min-height: 190px;
+    }
 
     .acciones-locales {
       display: flex;
@@ -236,7 +258,9 @@
       margin-top: 10px;
     }
 
-    .ayuda, .solucion, .retro {
+    .ayuda,
+    .solucion,
+    .retro {
       display: none;
       margin-top: 10px;
       border-radius: 12px;
@@ -275,7 +299,9 @@
       border-bottom: 1px dashed var(--gris-200);
     }
 
-    .rubrica-item:last-child { border-bottom: none; }
+    .rubrica-item:last-child {
+      border-bottom: none;
+    }
 
     .resultado {
       font-weight: 700;
@@ -342,13 +368,30 @@
     }
 
     @media print {
-      .toolbar, .acciones-locales button { display: none !important; }
-      body { background: white; }
-      .panel, .actividad { box-shadow: none; }
-      .ayuda, .solucion, .retro { display: block !important; }
+
+      .toolbar,
+      .acciones-locales button {
+        display: none !important;
+      }
+
+      body {
+        background: white;
+      }
+
+      .panel,
+      .actividad {
+        box-shadow: none;
+      }
+
+      .ayuda,
+      .solucion,
+      .retro {
+        display: block !important;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="contenedor">
     <section class="hero">
@@ -364,7 +407,6 @@
         <div class="meta-card"><strong>Asignatura</strong><br>Álgebra Matricial</div>
         <div class="meta-card"><strong>Semana</strong><br>1</div>
         <div class="meta-card"><strong>Docente</strong><br>Coordinación</div>
-        <div class="meta-card"><strong>Formato</strong><br>HTML + LaTeX + JavaScript</div>
       </div>
     </section>
 
@@ -380,7 +422,8 @@
       <main>
         <section class="panel">
           <span class="badge">Logro de aprendizaje</span>
-          <p>Aplica métodos de eliminación de acuerdo con la teoría para modelar y resolver sistemas de ecuaciones lineales en contextos propios de la ingeniería.</p>
+          <p>Aplica métodos de eliminación de acuerdo con la teoría para modelar y resolver sistemas de ecuaciones
+            lineales en contextos propios de la ingeniería.</p>
         </section>
 
         <section class="panel">
@@ -395,7 +438,9 @@
           </ul>
           <div class="resumen-math">
             <strong>Recordatorio matemático clave:</strong>
-            <p style="margin-bottom:0;">Un sistema lineal puede representarse como \(A\mathbf{x}=\mathbf{b}\). Resolverlo por Gauss equivale a aplicar operaciones elementales por filas sobre la matriz aumentada \(\left[A\mid \mathbf{b}\right]\).</p>
+            <p style="margin-bottom:0;">Un sistema lineal puede representarse como \(A\mathbf{x}=\mathbf{b}\).
+              Resolverlo por Gauss equivale a aplicar operaciones elementales por filas sobre la matriz aumentada
+              \(\left[A\mid \mathbf{b}\right]\).</p>
           </div>
         </section>
 
@@ -406,11 +451,15 @@
           <div class="actividad-body">
             <p>Una empresa de ensamblaje tecnológico produce tres tipos de dispositivos: \(A\), \(B\) y \(C\).</p>
             <ul>
-              <li>El dispositivo \(A\) requiere 2 horas de montaje, 3 unidades de componentes electrónicos y 1 prueba de control de calidad.</li>
-              <li>El dispositivo \(B\) requiere 3 horas de montaje, 2 unidades de componentes electrónicos y 4 pruebas de control de calidad.</li>
-              <li>El dispositivo \(C\) requiere 4 horas de montaje, 1 unidad de componentes electrónicos y 2 pruebas de control de calidad.</li>
+              <li>El dispositivo \(A\) requiere 2 horas de montaje, 3 unidades de componentes electrónicos y 1 prueba de
+                control de calidad.</li>
+              <li>El dispositivo \(B\) requiere 3 horas de montaje, 2 unidades de componentes electrónicos y 4 pruebas
+                de control de calidad.</li>
+              <li>El dispositivo \(C\) requiere 4 horas de montaje, 1 unidad de componentes electrónicos y 2 pruebas de
+                control de calidad.</li>
             </ul>
-            <p>Durante una semana se utilizaron exactamente 1200 horas de montaje, 600 unidades de componentes electrónicos y 900 pruebas de control de calidad.</p>
+            <p>Durante una semana se utilizaron exactamente 1200 horas de montaje, 600 unidades de componentes
+              electrónicos y 900 pruebas de control de calidad.</p>
 
             <div class="subitem">
               <label for="a1a">(a) Plantee una pregunta orientadora coherente con el problema.</label>
@@ -419,8 +468,10 @@
                 <button type="button" onclick="toggle('hint-a1a')">Ver pista</button>
                 <button type="button" class="secundario" onclick="toggle('sol-a1a')">Ver ejemplo</button>
               </div>
-              <div id="hint-a1a" class="ayuda">Formula una pregunta que apunte a determinar cuántas unidades de cada dispositivo se produjeron usando exactamente los recursos disponibles.</div>
-              <div id="sol-a1a" class="solucion">Ejemplo: ¿Cuántas unidades de los dispositivos \(A\), \(B\) y \(C\) se produjeron durante la semana si se utilizaron exactamente los recursos informados?</div>
+              <div id="hint-a1a" class="ayuda">Formula una pregunta que apunte a determinar cuántas unidades de cada
+                dispositivo se produjeron usando exactamente los recursos disponibles.</div>
+              <div id="sol-a1a" class="solucion">Ejemplo: ¿Cuántas unidades de los dispositivos \(A\), \(B\) y \(C\) se
+                produjeron durante la semana si se utilizaron exactamente los recursos informados?</div>
             </div>
 
             <div class="subitem">
@@ -431,24 +482,27 @@
                 <button type="button" class="secundario" onclick="toggle('sol-a1b')">Ver ejemplo</button>
               </div>
               <div id="hint-a1b" class="ayuda">Asigna una variable a la cantidad producida de cada dispositivo.</div>
-              <div id="sol-a1b" class="solucion">\(x\): unidades del dispositivo \(A\), \(y\): unidades del dispositivo \(B\), \(z\): unidades del dispositivo \(C\).</div>
+              <div id="sol-a1b" class="solucion">\(x\): unidades del dispositivo \(A\), \(y\): unidades del dispositivo
+                \(B\), \(z\): unidades del dispositivo \(C\).</div>
             </div>
 
             <div class="subitem">
               <label for="a1c">(c) Obtenga las ecuaciones que modelan la situación.</label>
-              <textarea id="a1c" class="grande" data-save placeholder="Puedes escribir, por ejemplo: 2x+3y+4z=1200"></textarea>
+              <textarea id="a1c" class="grande" data-save
+                placeholder="Puedes escribir, por ejemplo: 2x+3y+4z=1200"></textarea>
               <div class="acciones-locales">
                 <button type="button" onclick="toggle('hint-a1c')">Ver pista</button>
                 <button type="button" class="secundario" onclick="toggle('sol-a1c')">Ver solución esperada</button>
               </div>
-              <div id="hint-a1c" class="ayuda">Construye una ecuación por cada recurso total: horas de montaje, componentes y pruebas.</div>
+              <div id="hint-a1c" class="ayuda">Construye una ecuación por cada recurso total: horas de montaje,
+                componentes y pruebas.</div>
               <div id="sol-a1c" class="solucion">Sistema esperado:<br>\[
                 \begin{aligned}
                 2x+3y+4z &= 1200,\\
                 3x+2y+z &= 600,\\
                 x+4y+2z &= 900.
                 \end{aligned}
-              \]</div>
+                \]</div>
             </div>
 
             <div class="subitem">
@@ -470,7 +524,7 @@
                 \begin{bmatrix}
                 1200\\600\\900
                 \end{bmatrix}
-              \]</div>
+                \]</div>
             </div>
 
             <div class="subitem">
@@ -480,10 +534,11 @@
                 <button type="button" class="secundario" onclick="toggle('sol-a1e')">Ver solución</button>
               </div>
               <div id="sol-a1e" class="solucion">La solución del sistema es:<br>\[
-              x=0,\quad y=150,\quad z=150
-              \]
-              Verificación:<br>
-              \(2(0)+3(150)+4(150)=1050\), por lo que el estudiante debe revisar si el sistema fue copiado o modelado correctamente. Esta parte funciona también como detector de errores de modelación.</div>
+                x=60,\quad y=120,\quad z=180
+                \]
+                Verificación:<br>
+                \(2(60)+3(120)+4(180)=1200\), Compruebe las soluciones encontradas en las otras dos ecuaciones, de
+                cumplirse en las tres ecuaciones, se puede afirmar que son las soluciones del sistema .</div>
             </div>
 
             <div class="subitem">
@@ -492,7 +547,9 @@
               <div class="acciones-locales">
                 <button type="button" onclick="toggle('retro-a1f')">Orientación de interpretación</button>
               </div>
-              <div id="retro-a1f" class="retro">Una buena interpretación debe indicar si la solución es viable en el contexto productivo y si existen restricciones realistas, como la necesidad de cantidades enteras no negativas.</div>
+              <div id="retro-a1f" class="retro">Una buena interpretación debe indicar si la solución es viable en el
+                contexto productivo y si existen restricciones realistas, como la necesidad de cantidades enteras no
+                negativas.</div>
             </div>
           </div>
         </section>
@@ -502,15 +559,17 @@
             <h3>2. Sistema en contexto de ingeniería</h3>
           </div>
           <div class="actividad-body">
-            <p>En una obra de ingeniería se distribuyen recursos entre cuatro etapas del proyecto: cimentación, estructura, instalaciones y terminaciones. Sean \(x_1\), \(x_2\), \(x_3\) y \(x_4\) las cantidades asociadas a cada etapa. El uso total de recursos queda modelado por:</p>
+            <p>En una obra de ingeniería se distribuyen recursos entre cuatro etapas del proyecto: cimentación,
+              estructura, instalaciones y terminaciones. Sean \(x_1\), \(x_2\), \(x_3\) y \(x_4\) las cantidades
+              asociadas a cada etapa. El uso total de recursos queda modelado por:</p>
             <p>\[
-            \begin{aligned}
-            2x_1 + x_2 + 3x_3 + 2x_4 &= 105,\\
-            4x_1 + 2x_2 + 8x_3 + 4x_4 &= 240,\\
-            x_1 + x_2 + 2x_3 + 2x_4 &= 85,\\
-            3x_1 + 3x_2 + 3x_3 + x_4 &= 110.
-            \end{aligned}
-            \]</p>
+              \begin{aligned}
+              2x_1 + x_2 + 3x_3 + 2x_4 &= 105,\\
+              4x_1 + 2x_2 + 8x_3 + 4x_4 &= 240,\\
+              x_1 + x_2 + 2x_3 + 2x_4 &= 85,\\
+              3x_1 + 3x_2 + 3x_3 + x_4 &= 110.
+              \end{aligned}
+              \]</p>
 
             <div class="subitem">
               <label for="a2a">(a) Plantee la pregunta orientadora del problema.</label>
@@ -529,20 +588,20 @@
                 <button type="button" class="secundario" onclick="toggle('sol-a2c')">Ver solución esperada</button>
               </div>
               <div id="sol-a2c" class="solucion">\[
-              \begin{bmatrix}
-              2&1&3&2\\
-              4&2&8&4\\
-              1&1&2&2\\
-              3&3&3&1
-              \end{bmatrix}
-              \begin{bmatrix}
-              x_1\\x_2\\x_3\\x_4
-              \end{bmatrix}
-              =
-              \begin{bmatrix}
-              105\\240\\85\\110
-              \end{bmatrix}
-              \]</div>
+                \begin{bmatrix}
+                2&1&3&2\\
+                4&2&8&4\\
+                1&1&2&2\\
+                3&3&3&1
+                \end{bmatrix}
+                \begin{bmatrix}
+                x_1\\x_2\\x_3\\x_4
+                \end{bmatrix}
+                =
+                \begin{bmatrix}
+                105\\240\\85\\110
+                \end{bmatrix}
+                \]</div>
             </div>
 
             <div class="subitem">
@@ -562,19 +621,21 @@
             <h3>3. Consistencia de un sistema</h3>
           </div>
           <div class="actividad-body">
-            <p>Usando operaciones elementales por filas, establezca si el siguiente sistema es consistente. En caso de serlo, determine sus soluciones:</p>
+            <p>Usando operaciones elementales por filas, establezca si el siguiente sistema es consistente. En caso de
+              serlo, determine sus soluciones:</p>
             <p>\[
-            \begin{aligned}
-            x+y+z+w &= 10,\\
-            x+2y+3z+4w &= 20,\\
-            2x+3y+4z+5w &= 30.
-            \end{aligned}
-            \]</p>
+              \begin{aligned}
+              x+y+z+w &= 10,\\
+              x+2y+3z+4w &= 20,\\
+              2x+3y+4z+5w &= 30.
+              \end{aligned}
+              \]</p>
             <textarea id="a3" class="grande" data-save></textarea>
             <div class="acciones-locales">
               <button type="button" onclick="toggle('sol-a3')">Ver orientación</button>
             </div>
-            <div id="sol-a3" class="solucion">Hay más incógnitas que ecuaciones. Debes analizar si el sistema es consistente y, en caso afirmativo, expresar el conjunto solución utilizando parámetros libres.</div>
+            <div id="sol-a3" class="solucion">Hay más incógnitas que ecuaciones. Debes analizar si el sistema es
+              consistente y, en caso afirmativo, expresar el conjunto solución utilizando parámetros libres.</div>
           </div>
         </section>
 
@@ -583,14 +644,15 @@
             <h3>4. Segundo análisis de consistencia</h3>
           </div>
           <div class="actividad-body">
-            <p>Usando operaciones elementales por filas, establezca si el siguiente sistema es consistente. En caso de serlo, determine sus soluciones:</p>
+            <p>Usando operaciones elementales por filas, establezca si el siguiente sistema es consistente. En caso de
+              serlo, determine sus soluciones:</p>
             <p>\[
-            \begin{aligned}
-            a+b+c+d &= 100,\\
-            a+2b+3c+4d &= 200,\\
-            2a+3b+4c+5d &= 300.
-            \end{aligned}
-            \]</p>
+              \begin{aligned}
+              a+b+c+d &= 100,\\
+              a+2b+3c+4d &= 200,\\
+              2a+3b+4c+5d &= 300.
+              \end{aligned}
+              \]</p>
             <textarea id="a4" class="grande" data-save></textarea>
           </div>
         </section>
@@ -599,10 +661,13 @@
       <aside>
         <div class="panel sticky-box">
           <h3>Panel de seguimiento</h3>
-          <p class="footer-note">Este panel permite autoevaluar el trabajo del estudiante y monitorear avance de completitud.</p>
+          <p class="footer-note">Este panel permite autoevaluar el trabajo del estudiante y monitorear avance de
+            completitud.</p>
 
           <div class="progreso-wrap">
-            <div class="progreso-barra"><div id="progresoValor" class="progreso-valor"></div></div>
+            <div class="progreso-barra">
+              <div id="progresoValor" class="progreso-valor"></div>
+            </div>
             <div id="progresoTexto" class="progreso-texto">Progreso completado: 0%</div>
           </div>
 
@@ -662,7 +727,8 @@
           <h3>Checklist del estudiante</h3>
           <div class="checklist">
             <label><input type="checkbox" data-save-check="c1"> Identifiqué claramente las variables.</label>
-            <label><input type="checkbox" data-save-check="c2"> Construí una ecuación por cada restricción o recurso.</label>
+            <label><input type="checkbox" data-save-check="c2"> Construí una ecuación por cada restricción o
+              recurso.</label>
             <label><input type="checkbox" data-save-check="c3"> Escribí la forma matricial del sistema.</label>
             <label><input type="checkbox" data-save-check="c4"> Verifiqué mis operaciones en Gauss.</label>
             <label><input type="checkbox" data-save-check="c5"> Interpreté la solución dentro del contexto.</label>
@@ -677,7 +743,8 @@
           <span class="pill">Consistencia</span>
           <span class="pill">Interpretación</span>
 
-          <p class="footer-note" style="margin-top:12px;">El recurso guarda el progreso en el navegador usando almacenamiento local. Es útil para Canvas o páginas HTML institucionales.</p>
+          <p class="footer-note" style="margin-top:12px;">El recurso guarda el progreso en el navegador usando
+            almacenamiento local. Es útil para Canvas o páginas HTML institucionales.</p>
         </div>
       </aside>
     </div>
@@ -783,4 +850,5 @@
     });
   </script>
 </body>
+
 </html>
