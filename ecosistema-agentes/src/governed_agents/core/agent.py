@@ -41,9 +41,11 @@ class ActionContext:
         self,
         agent_id: str,
         authorize: Callable[[ActionRequest, float], Any],
+        delegate: Callable[[str, dict[str, Any]], Any] | None = None,
     ) -> None:
         self._agent_id = agent_id
         self._authorize = authorize
+        self._delegate = delegate
 
     def act(self, action: str, resource: str, params: dict[str, Any] | None = None, cost: float = 0.0) -> Any:
         """Solicita ejecutar una acción. Lanza ActionDenied / ActionPendingApproval."""
@@ -54,6 +56,21 @@ class ActionContext:
             params=params or {},
         )
         return self._authorize(request, cost)
+
+    def delegate(self, capability: str, payload: dict[str, Any]) -> Any:
+        """Delega una subtarea en otro agente del ecosistema.
+
+        La delegación es en sí misma una acción gobernada (``agent.delegate``
+        sobre ``capability/<capacidad>``): puede denegarse por política y
+        está sujeta a un límite de profundidad en el orquestador.
+        Devuelve el ``TaskResult`` de la subtarea.
+        """
+        if self._delegate is None:
+            raise ActionDenied(
+                ActionRequest(self._agent_id, "agent.delegate", f"capability/{capability}"),
+                "Este contexto no permite delegar",
+            )
+        return self._delegate(capability, payload)
 
 
 class Agent(ABC):

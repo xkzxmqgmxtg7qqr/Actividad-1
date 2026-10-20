@@ -74,12 +74,15 @@ class Orchestrator:
         policy_engine: PolicyEngine,
         audit_log: AuditLog | None = None,
         limiter: UsageLimiter | None = None,
+        max_delegation_depth: int = 3,
     ) -> None:
         self.registry = registry
         self.policy_engine = policy_engine
-        self.audit = audit_log or AuditLog()
-        self.limiter = limiter or UsageLimiter()
+        # No usar `or`: un log vacío tiene len() == 0 y se evaluaría como falso.
+        self.audit = audit_log if audit_log is not None else AuditLog()
+        self.limiter = limiter if limiter is not None else UsageLimiter()
         self.approvals = ApprovalQueue()
+        self.max_delegation_depth = max_delegation_depth
         self._tools: dict[str, ToolExecutor] = {}
 
     # ------------------------------------------------------------------
@@ -142,9 +145,48 @@ class Orchestrator:
         return result
 
     # ------------------------------------------------------------------
+    # Delegación entre agentes (también gobernada)
+    # ------------------------------------------------------------------
+    def _delegate(self, delegator: Agent, capability: str, payload: dict, depth: int) -> TaskResult:
+        request = ActionRequest(
+            agent_id=delegator.agent_id,
+            action="agent.delegate",
+            resource=f"capability/{capability}",
+            params={"payload_keys": sorted(payload.keys())},
+        )
+        if depth + 1 > self.max_delegation_depth:
+            reason = f"Profundidad máxima de delegación alcanzada ({self.max_delegation_depth})"
+            self.audit.record(
+                "delegation_denied",
+                delegator.agent_id,
+                {"capability": capability, "reason": reason},
+            )
+            raise ActionDenied(request, reason)
+
+        decision = self.policy_engine.evaluate(delegator.identity, request.action, request.resource)
+        if not decision.allowed:
+            self.audit.record(
+                "delegation_denied",
+                delegator.agent_id,
+                {"capability": capability, "reason": decision.reason},
+            )
+            raise ActionDenied(request, decision.reason)
+
+        self.audit.record(
+            "task_delegated",
+            delegator.agent_id,
+            {"capability": capability, "policy": decision.matched_policy, "depth": depth + 1},
+        )
+        subtask = Task(capability, payload, requested_by=f"agent:{delegator.agent_id}")
+        return self._submit(subtask, depth=depth + 1)
+
+    # ------------------------------------------------------------------
     # Ciclo de vida de tareas
     # ------------------------------------------------------------------
     def submit(self, task: Task) -> TaskResult:
+        return self._submit(task, depth=0)
+
+    def _submit(self, task: Task, depth: int) -> TaskResult:
         candidates = self.registry.find_by_capability(task.capability)
         if not candidates:
             raise UnknownCapability(task.capability)
@@ -154,12 +196,13 @@ class Orchestrator:
             "task_submitted",
             agent.agent_id,
             {"task_id": task.task_id, "capability": task.capability,
-             "requested_by": task.requested_by},
+             "requested_by": task.requested_by, "depth": depth},
         )
 
         context = ActionContext(
             agent.agent_id,
             lambda request, cost: self._authorize_and_execute(agent, request, cost),
+            delegate=lambda capability, payload: self._delegate(agent, capability, payload, depth),
         )
         try:
             output = agent.handle(task, context)

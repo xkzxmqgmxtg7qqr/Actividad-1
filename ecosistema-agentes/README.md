@@ -26,14 +26,26 @@ Agente ── solicita acción ──> Orquestador
 | Motor de políticas | `governance/policy.py` | Reglas ALLOW/DENY declarativas (estilo IAM) por rol, acción y recurso, con patrones glob. Denegación por defecto; un DENY explícito siempre gana. Cargables desde JSON versionable. |
 | Auditoría | `governance/audit.py` | Registro append-only con encadenamiento SHA-256: cualquier manipulación retroactiva se detecta con `verify_integrity()`. |
 | Límites de uso | `governance/limits.py` | Cuota de acciones y presupuesto de coste por agente en ventanas de tiempo. |
+| Auditoría persistente | `governance/audit_sqlite.py` | Misma cadena de hashes sobre SQLite: los eventos sobreviven a reinicios y la manipulación directa de la base de datos se detecta al verificar. |
 | Registro de agentes | `orchestration/registry.py` | Directorio oficial: solo los agentes registrados reciben tareas; se indexa por capacidad. |
-| Orquestador | `orchestration/orchestrator.py` | Aplica todo lo anterior en cada acción, gestiona la cola de aprobaciones humanas (o de agentes con rol supervisor) y ejecuta las herramientas reales. |
+| Orquestador | `orchestration/orchestrator.py` | Aplica todo lo anterior en cada acción, gestiona la cola de aprobaciones humanas (o de agentes con rol supervisor), media la delegación entre agentes y ejecuta las herramientas reales. |
+| Panel web | `panel/server.py` | Interfaz para el humano en el circuito: aprobar/rechazar acciones pendientes y revisar la pista de auditoría con su estado de integridad. |
+
+### Delegación gobernada entre agentes
+
+Un agente puede encargar subtareas a otro con `context.delegate(capacidad, payload)`, pero la delegación es en sí misma una acción gobernada (`agent.delegate` sobre `capability/<capacidad>`): puede denegarse por política (por defecto solo los roles `trusted` y `supervisor` delegan) y está sujeta a un límite de profundidad (`max_delegation_depth`) que corta cadenas de delegación infinitas. Cada subtarea queda auditada con quién la pidió y a qué profundidad.
 
 ## Uso rápido
 
 ```bash
-# Ejecutar la demo (investigador + redactor + agente externo malicioso)
+# Demo básica (investigador + redactor + agente externo malicioso)
 python examples/demo.py
+
+# Demo de delegación gobernada y auditoría persistente en SQLite
+python examples/demo_fase2.py
+
+# Panel web de aprobaciones en http://127.0.0.1:8765
+python examples/demo_panel.py
 
 # Ejecutar las pruebas
 python -m unittest discover -s tests -v
@@ -82,17 +94,17 @@ Las políticas también pueden definirse en JSON (ver `policies/default_policies
 ecosistema-agentes/
 ├── src/governed_agents/
 │   ├── core/            # Agent, ActionContext, Task, ActionRequest
-│   ├── governance/      # identidad, políticas, auditoría, límites
-│   └── orchestration/   # registro de agentes y orquestador
+│   ├── governance/      # identidad, políticas, auditoría (memoria y SQLite), límites
+│   ├── orchestration/   # registro de agentes, orquestador y delegación
+│   └── panel/           # panel web de aprobaciones y auditoría
 ├── policies/            # políticas declarativas en JSON
-├── examples/demo.py     # escenario completo de demostración
+├── examples/            # demos: básica, delegación/persistencia y panel web
 └── tests/               # pruebas unitarias y de integración
 ```
 
 ## Posibles extensiones
 
 - Ejecución asíncrona y colas de mensajes entre agentes.
-- Persistencia de la auditoría (SQLite / almacén append-only externo).
 - Políticas con condiciones sobre parámetros (p. ej. límites por destinatario).
 - Integración con modelos de lenguaje reales como "cerebro" de cada agente.
-- Panel web para la cola de aprobaciones y la pista de auditoría.
+- Autenticación y roles de usuario en el panel web.

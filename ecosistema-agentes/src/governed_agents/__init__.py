@@ -10,6 +10,7 @@ from governed_agents.core.message import Task, TaskResult, ActionRequest
 from governed_agents.governance.identity import AgentIdentity, Role
 from governed_agents.governance.policy import Policy, PolicyEngine, Decision, Effect
 from governed_agents.governance.audit import AuditLog, AuditEvent
+from governed_agents.governance.audit_sqlite import SqliteAuditLog
 from governed_agents.governance.limits import UsageLimiter, UsageLimit
 from governed_agents.orchestration.registry import AgentRegistry
 from governed_agents.orchestration.orchestrator import Orchestrator, ApprovalQueue
@@ -28,6 +29,7 @@ __all__ = [
     "Effect",
     "AuditLog",
     "AuditEvent",
+    "SqliteAuditLog",
     "UsageLimiter",
     "UsageLimit",
     "AgentRegistry",

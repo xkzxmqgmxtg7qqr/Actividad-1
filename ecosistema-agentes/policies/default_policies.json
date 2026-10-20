@@ -33,6 +33,14 @@
     "description": "Enviar correos está permitido pero siempre con aprobación humana."
   },
   {
+    "policy_id": "allow-delegacion-interna",
+    "effect": "allow",
+    "roles": ["supervisor", "trusted"],
+    "actions": ["agent.delegate"],
+    "resources": ["capability/*"],
+    "description": "Solo los agentes de confianza pueden delegar subtareas en otros agentes."
+  },
+  {
     "policy_id": "allow-sandbox-lectura",
     "effect": "allow",
     "roles": ["sandboxed"],
