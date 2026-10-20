@@ -20,7 +20,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from fnmatch import fnmatch
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from governed_agents.governance.identity import AgentIdentity, Role
 
@@ -30,6 +30,41 @@ class Effect(str, Enum):
     DENY = "deny"
 
 
+_OPERATORS: dict[str, Callable[[Any, Any], bool]] = {
+    "eq": lambda value, expected: value == expected,
+    "ne": lambda value, expected: value != expected,
+    "in": lambda value, expected: value in expected,
+    "not_in": lambda value, expected: value not in expected,
+    "lt": lambda value, expected: value < expected,
+    "lte": lambda value, expected: value <= expected,
+    "gt": lambda value, expected: value > expected,
+    "gte": lambda value, expected: value >= expected,
+    "matches": lambda value, expected: isinstance(value, str) and fnmatch(value, expected),
+}
+
+
+@dataclass(frozen=True)
+class Condition:
+    """Condición sobre un parámetro de la acción (``ActionRequest.params``).
+
+    Si el parámetro no está presente, la condición NO se cumple y la
+    política no aplica. Operadores: eq, ne, in, not_in, lt, lte, gt,
+    gte y matches (patrón glob sobre cadenas).
+    """
+
+    param: str
+    op: str
+    value: Any
+
+    def holds(self, params: dict[str, Any]) -> bool:
+        if self.param not in params:
+            return False
+        try:
+            return _OPERATORS[self.op](params[self.param], self.value)
+        except TypeError:
+            return False
+
+
 @dataclass(frozen=True)
 class Policy:
     policy_id: str
@@ -37,14 +72,16 @@ class Policy:
     roles: tuple[str, ...] = ("*",)      # roles a los que aplica
     actions: tuple[str, ...] = ("*",)    # patrones de acción, p.ej. "web.*"
     resources: tuple[str, ...] = ("*",)  # patrones de recurso
+    conditions: tuple[Condition, ...] = ()  # condiciones sobre los parámetros
     requires_approval: bool = False
     description: str = ""
 
-    def matches(self, role: Role, action: str, resource: str) -> bool:
+    def matches(self, role: Role, action: str, resource: str, params: dict[str, Any] | None = None) -> bool:
         return (
             any(fnmatch(role.value, p) for p in self.roles)
             and any(fnmatch(action, p) for p in self.actions)
             and any(fnmatch(resource, p) for p in self.resources)
+            and all(c.holds(params or {}) for c in self.conditions)
         )
 
 
@@ -67,8 +104,14 @@ class PolicyEngine:
     def policies(self) -> tuple[Policy, ...]:
         return tuple(self._policies)
 
-    def evaluate(self, identity: AgentIdentity, action: str, resource: str) -> Decision:
-        matched = [p for p in self._policies if p.matches(identity.role, action, resource)]
+    def evaluate(
+        self,
+        identity: AgentIdentity,
+        action: str,
+        resource: str,
+        params: dict[str, Any] | None = None,
+    ) -> Decision:
+        matched = [p for p in self._policies if p.matches(identity.role, action, resource, params)]
 
         for policy in matched:
             if policy.effect is Effect.DENY:
@@ -108,6 +151,10 @@ class PolicyEngine:
                 roles=tuple(item.get("roles", ["*"])),
                 actions=tuple(item.get("actions", ["*"])),
                 resources=tuple(item.get("resources", ["*"])),
+                conditions=tuple(
+                    Condition(c["param"], c["op"], c["value"])
+                    for c in item.get("conditions", [])
+                ),
                 requires_approval=item.get("requires_approval", False),
                 description=item.get("description", ""),
             )

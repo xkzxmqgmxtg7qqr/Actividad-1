@@ -33,6 +33,14 @@
     "description": "Enviar correos está permitido pero siempre con aprobación humana."
   },
   {
+    "policy_id": "allow-llm-interno",
+    "effect": "allow",
+    "roles": ["supervisor", "trusted", "standard"],
+    "actions": ["llm.generate"],
+    "resources": ["model/*"],
+    "description": "Los agentes internos pueden usar modelos de lenguaje; los externos no."
+  },
+  {
     "policy_id": "allow-delegacion-interna",
     "effect": "allow",
     "roles": ["supervisor", "trusted"],

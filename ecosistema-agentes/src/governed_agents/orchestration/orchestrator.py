@@ -104,7 +104,9 @@ class Orchestrator:
     # Autorización de acciones (corazón de la gobernanza)
     # ------------------------------------------------------------------
     def _authorize_and_execute(self, agent: Agent, request: ActionRequest, cost: float) -> Any:
-        decision = self.policy_engine.evaluate(agent.identity, request.action, request.resource)
+        decision = self.policy_engine.evaluate(
+            agent.identity, request.action, request.resource, request.params
+        )
         if not decision.allowed:
             self.audit.record(
                 "action_denied",
@@ -163,7 +165,9 @@ class Orchestrator:
             )
             raise ActionDenied(request, reason)
 
-        decision = self.policy_engine.evaluate(delegator.identity, request.action, request.resource)
+        decision = self.policy_engine.evaluate(
+            delegator.identity, request.action, request.resource, request.params
+        )
         if not decision.allowed:
             self.audit.record(
                 "delegation_denied",
