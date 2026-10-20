@@ -1,0 +1,43 @@
+[
+  {
+    "policy_id": "deny-produccion",
+    "effect": "deny",
+    "roles": ["*"],
+    "actions": ["db.delete", "db.drop"],
+    "resources": ["produccion/*"],
+    "description": "Nadie puede borrar datos de producción, sin excepciones."
+  },
+  {
+    "policy_id": "allow-lectura-general",
+    "effect": "allow",
+    "roles": ["supervisor", "trusted", "standard"],
+    "actions": ["web.search", "fs.read", "db.read"],
+    "resources": ["*"],
+    "description": "Los agentes internos pueden leer y buscar información."
+  },
+  {
+    "policy_id": "allow-escritura-informes",
+    "effect": "allow",
+    "roles": ["supervisor", "trusted", "standard"],
+    "actions": ["fs.write"],
+    "resources": ["reports/*"],
+    "description": "Escritura permitida solo dentro del área de informes."
+  },
+  {
+    "policy_id": "allow-correo-con-aprobacion",
+    "effect": "allow",
+    "roles": ["supervisor", "trusted", "standard"],
+    "actions": ["email.send"],
+    "resources": ["*"],
+    "requires_approval": true,
+    "description": "Enviar correos está permitido pero siempre con aprobación humana."
+  },
+  {
+    "policy_id": "allow-sandbox-lectura",
+    "effect": "allow",
+    "roles": ["sandboxed"],
+    "actions": ["web.search", "fs.read"],
+    "resources": ["public/*", "query/*"],
+    "description": "Los agentes externos solo leen recursos públicos."
+  }
+]
